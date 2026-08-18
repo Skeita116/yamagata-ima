@@ -8,6 +8,8 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
+const siteUrl = "https://yamagata-ima.vercel.app";
+
 type Camera = {
   id: number;
   name: string;
@@ -48,26 +50,48 @@ export async function generateMetadata({
     };
   }
 
-  const title = `${camera.name}｜山形ライブカメラ`;
+  const pageUrl = `${siteUrl}/camera/${camera.id}`;
+
+  const title =
+    `${camera.name}｜${camera.city}の現在の様子｜やまがたいま`;
+
   const description =
     camera.description ||
-    `${camera.city}の「${camera.name}」のライブカメラ情報。山形県の現在の様子をリアルタイムでチェックできます。`;
+    `${camera.city}にある「${camera.name}」のライブカメラです。山形県内の現在の天気や現地の様子をライブ映像で確認できます。`;
+
+  const ogImage = camera.youtube_id
+    ? `https://img.youtube.com/vi/${camera.youtube_id}/maxresdefault.jpg`
+    : `${siteUrl}/ogp.png?v=2`;
 
   return {
     title,
     description,
 
+    alternates: {
+      canonical: pageUrl,
+    },
+
     openGraph: {
       title,
       description,
-      type: "website",
+      url: pageUrl,
       siteName: "やまがたいま",
+      type: "website",
+      locale: "ja_JP",
+
+      images: [
+        {
+          url: ogImage,
+          alt: `${camera.name}｜やまがたいま`,
+        },
+      ],
     },
 
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: [ogImage],
     },
   };
 }
@@ -88,10 +112,42 @@ export default async function CameraPage({
     ? `https://img.youtube.com/vi/${camera.youtube_id}/maxresdefault.jpg`
     : null;
 
+  const pageUrl = `${siteUrl}/camera/${camera.id}`;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: camera.name,
+    description:
+      camera.description ||
+      `${camera.city}の現在の様子を確認できるライブカメラページです。`,
+    url: pageUrl,
+    isPartOf: {
+      "@type": "WebSite",
+      name: "やまがたいま",
+      url: siteUrl,
+    },
+    about: {
+      "@type": "Place",
+      name: camera.city,
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: camera.latitude,
+        longitude: camera.longitude,
+      },
+    },
+  };
+
   return (
     <main className="min-h-screen bg-slate-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd),
+        }}
+      />
+
       <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
-        {/* 戻る */}
         <Link
           href="/"
           className="text-sm font-bold text-sky-600 transition hover:text-sky-800"
@@ -99,7 +155,6 @@ export default async function CameraPage({
           ← ライブカメラ一覧へ戻る
         </Link>
 
-        {/* ヘッダー */}
         <section className="mt-8">
           <div className="mb-4 flex flex-wrap gap-2">
             <span className="rounded-full bg-sky-100 px-3 py-1 text-xs font-bold text-sky-700">
@@ -120,7 +175,6 @@ export default async function CameraPage({
           </p>
         </section>
 
-        {/* サムネイル */}
         <section className="mt-8 overflow-hidden rounded-3xl bg-slate-200 shadow-sm">
           {thumbnailUrl ? (
             <img
@@ -135,7 +189,6 @@ export default async function CameraPage({
           )}
         </section>
 
-        {/* ライブボタン */}
         <section className="mt-6">
           {camera.stream_url ? (
             <a
@@ -153,7 +206,6 @@ export default async function CameraPage({
           )}
         </section>
 
-        {/* カメラ情報 */}
         <section className="mt-10 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
           <p className="text-xs font-bold uppercase tracking-widest text-sky-600">
             CAMERA INFORMATION
@@ -195,20 +247,18 @@ export default async function CameraPage({
             </div>
           </div>
 
-          {camera.description && (
-            <div className="mt-6 rounded-2xl bg-slate-50 p-5">
-              <h2 className="font-black text-slate-900">
-                {camera.name}について
-              </h2>
+          <div className="mt-6 rounded-2xl bg-slate-50 p-5">
+            <h2 className="font-black text-slate-900">
+              {camera.name}について
+            </h2>
 
-              <p className="mt-3 whitespace-pre-line text-sm leading-7 text-slate-600">
-                {camera.description}
-              </p>
-            </div>
-          )}
+            <p className="mt-3 whitespace-pre-line text-sm leading-7 text-slate-600">
+              {camera.description ||
+                `${camera.name}は、${camera.city}周辺の現在の様子を確認できるライブカメラです。天候や現地の状況確認、観光やお出かけ前の参考としてご利用ください。`}
+            </p>
+          </div>
         </section>
 
-        {/* サービス説明 */}
         <section className="mt-10 rounded-3xl bg-slate-900 p-6 text-white sm:p-8">
           <p className="text-sm font-bold text-sky-300">
             やまがたいま
