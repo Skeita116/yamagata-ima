@@ -23,16 +23,31 @@ export default async function PopularCameras() {
     }
   );
 
+  // デバッグ用：エラーがあれば画面に表示
   if (error) {
-    console.error("popular cameras error:", error);
-    return null;
+    return (
+      <section className="mt-14 rounded-2xl border border-red-300 bg-red-50 p-6">
+        <p className="font-bold text-red-700">
+          ランキング取得エラー
+        </p>
+
+        <p className="mt-2 text-sm text-red-600">
+          {error.message}
+        </p>
+      </section>
+    );
   }
 
-  const cameras = (data ?? []) as PopularCamera[];
+  const cameras =
+    (data ?? []) as PopularCamera[];
 
+  // まだデータがない場合
   if (cameras.length === 0) {
     return (
-      <section className="mt-14">
+      <section
+        id="ranking"
+        className="mt-14 scroll-mt-28"
+      >
         <div className="mb-6">
           <p className="text-xs font-bold uppercase tracking-widest text-amber-600">
             RANKING
@@ -85,14 +100,27 @@ export default async function PopularCameras() {
           return (
             <article
               key={camera.camera_id}
-              className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+              className="
+                flex
+                items-center
+                gap-4
+                rounded-2xl
+                border
+                border-slate-200
+                bg-white
+                p-4
+                shadow-sm
+                transition
+                hover:-translate-y-0.5
+                hover:shadow-md
+              "
             >
               {/* 順位 */}
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-xl font-black">
                 {medal}
               </div>
 
-              {/* カメラ情報 */}
+              {/* 情報 */}
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="rounded-full bg-sky-50 px-2.5 py-1 text-xs font-bold text-sky-700">
@@ -109,10 +137,21 @@ export default async function PopularCameras() {
                 </h3>
               </div>
 
-              {/* 詳細ページ */}
+              {/* 詳細 */}
               <Link
                 href={`/camera/${camera.camera_id}`}
-                className="shrink-0 rounded-xl bg-slate-900 px-4 py-2 text-sm font-bold text-white transition hover:bg-sky-600"
+                className="
+                  shrink-0
+                  rounded-xl
+                  bg-slate-900
+                  px-4
+                  py-2
+                  text-sm
+                  font-bold
+                  text-white
+                  transition
+                  hover:bg-sky-600
+                "
               >
                 詳細 →
               </Link>
