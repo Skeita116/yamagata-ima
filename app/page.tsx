@@ -32,33 +32,47 @@ export default async function Home() {
       ===================================================== */}
       <section className="relative overflow-hidden bg-slate-950">
 
-        {/* 背景画像 */}
+        {/* 背景画像
+            スマホ：画像全体を見せる
+            PC：画面いっぱいに表示
+        */}
         <div
-          className="absolute inset-0 bg-cover bg-center"
+          className="
+            absolute
+            inset-0
+            bg-contain
+            bg-top
+            bg-no-repeat
+            sm:bg-cover
+            sm:bg-center
+          "
           style={{
             backgroundImage: "url('/ogp.png')",
           }}
         />
 
-        {/* 左側を濃くする */}
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/85 to-slate-950/20" />
+        {/* スマホでは画像の下側を自然につなぐ */}
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/10 via-slate-950/45 to-slate-950 sm:hidden" />
 
-        {/* 下方向 */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/20" />
+        {/* PC：左側を濃く */}
+        <div className="absolute inset-0 hidden bg-gradient-to-r from-slate-950 via-slate-950/85 to-slate-950/20 sm:block" />
 
-        <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24 lg:py-32">
+        {/* 下方向のグラデーション */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/10" />
+
+        <div className="relative mx-auto max-w-6xl px-4 pb-16 pt-48 sm:px-6 sm:py-24 lg:py-32">
 
           <div className="max-w-2xl">
 
             {/* ラベル */}
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-sky-300/30 bg-sky-400/10 px-4 py-2 backdrop-blur">
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-sky-300/30 bg-slate-950/50 px-4 py-2 backdrop-blur sm:bg-sky-400/10">
 
               <span className="relative flex h-2.5 w-2.5">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
                 <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-red-500" />
               </span>
 
-              <span className="text-xs font-black tracking-[0.16em] text-sky-200">
+              <span className="text-[10px] font-black tracking-[0.16em] text-sky-200 sm:text-xs">
                 YAMAGATA LIVE CAMERA MAP
               </span>
 
@@ -82,7 +96,7 @@ export default async function Home() {
             </p>
 
             {/* CTA */}
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
 
               <Link
                 href="/#live-map"
@@ -176,7 +190,6 @@ export default async function Home() {
 
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
 
-            {/* 温泉 */}
             <Link
               href="/category/温泉"
               className="
@@ -207,8 +220,6 @@ export default async function Home() {
               </p>
             </Link>
 
-
-            {/* スキー */}
             <Link
               href="/category/スキー場"
               className="
@@ -239,8 +250,6 @@ export default async function Home() {
               </p>
             </Link>
 
-
-            {/* 空港 */}
             <Link
               href="/category/空港"
               className="
@@ -271,8 +280,6 @@ export default async function Home() {
               </p>
             </Link>
 
-
-            {/* 観光 */}
             <Link
               href="/category/観光"
               className="
@@ -313,30 +320,21 @@ export default async function Home() {
       ===================================================== */}
       <section className="relative bg-slate-50">
 
-        {/* 背景装飾 */}
         <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-sky-50 to-transparent" />
 
         <div className="relative mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20">
 
-          {/* =================================================
-              人気ランキング
-          ================================================= */}
+          {/* 人気ランキング */}
           <PopularCameras />
 
-
-          {/* =================================================
-              エラー
-          ================================================= */}
+          {/* Supabaseエラー */}
           {error && (
             <div className="mt-10 rounded-2xl border border-red-200 bg-red-50 p-5 text-sm font-bold text-red-700">
               データ取得エラー：{error.message}
             </div>
           )}
 
-
-          {/* =================================================
-              検索・地図・カメラ
-          ================================================= */}
+          {/* 検索・地図・一覧 */}
           {!error && (
             <div className="mt-16">
               <CameraExplorer cameras={cameraList} />
