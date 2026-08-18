@@ -33,7 +33,10 @@ export default function CameraExplorer({
       .map((camera) => camera.category)
       .filter(Boolean);
 
-    return ["すべて", ...Array.from(new Set(values))];
+    return [
+      "すべて",
+      ...Array.from(new Set(values)),
+    ];
   }, [cameras]);
 
   const filteredCameras = useMemo(() => {
@@ -110,7 +113,7 @@ export default function CameraExplorer({
         </div>
       </section>
 
-      {/* カテゴリ */}
+      {/* カテゴリ絞り込み */}
       <section className="mb-8">
         <p className="mb-3 text-xs font-bold uppercase tracking-widest text-sky-600">
           CATEGORY
@@ -258,12 +261,31 @@ export default function CameraExplorer({
                   {/* カード本文 */}
                   <div className="p-5">
                     <div className="mb-3 flex items-center justify-between gap-3">
-                      <span className="rounded-full bg-sky-50 px-3 py-1 text-xs font-bold text-sky-700">
-                        {camera.category}
-                      </span>
-
+                      {/* カテゴリSEOページ */}
                       <Link
-                        href={`/area/${encodeURIComponent(camera.city)}`}
+                        href={`/category/${encodeURIComponent(
+                          camera.category
+                        )}`}
+                        className="
+                          rounded-full
+                          bg-sky-50
+                          px-3
+                          py-1
+                          text-xs
+                          font-bold
+                          text-sky-700
+                          transition
+                          hover:bg-sky-100
+                        "
+                      >
+                        {camera.category}
+                      </Link>
+
+                      {/* 市町村SEOページ */}
+                      <Link
+                        href={`/area/${encodeURIComponent(
+                          camera.city
+                        )}`}
                         className="
                           text-xs
                           font-medium
@@ -310,12 +332,16 @@ export default function CameraExplorer({
                       "
                     >
                       詳細を見る
-                      <span className="ml-2">→</span>
+                      <span className="ml-2">
+                        →
+                      </span>
                     </Link>
 
-                    {/* 市町村ページ */}
+                    {/* 市町村一覧 */}
                     <Link
-                      href={`/area/${encodeURIComponent(camera.city)}`}
+                      href={`/area/${encodeURIComponent(
+                        camera.city
+                      )}`}
                       className="
                         mt-2
                         inline-flex
@@ -334,7 +360,37 @@ export default function CameraExplorer({
                       "
                     >
                       {camera.city}のカメラ一覧を見る
-                      <span className="ml-2">→</span>
+                      <span className="ml-2">
+                        →
+                      </span>
+                    </Link>
+
+                    {/* カテゴリ一覧 */}
+                    <Link
+                      href={`/category/${encodeURIComponent(
+                        camera.category
+                      )}`}
+                      className="
+                        mt-2
+                        inline-flex
+                        w-full
+                        items-center
+                        justify-center
+                        rounded-xl
+                        bg-emerald-50
+                        px-4
+                        py-3
+                        text-sm
+                        font-bold
+                        text-emerald-700
+                        transition
+                        hover:bg-emerald-100
+                      "
+                    >
+                      {camera.category}のカメラ一覧を見る
+                      <span className="ml-2">
+                        →
+                      </span>
                     </Link>
 
                     {/* ライブ映像 */}
@@ -350,8 +406,10 @@ export default function CameraExplorer({
                             {
                               camera_name: camera.name,
                               city: camera.city,
-                              category: camera.category,
-                              camera_id: camera.id,
+                              category:
+                                camera.category,
+                              camera_id:
+                                camera.id,
                             }
                           );
                         }}
