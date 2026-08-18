@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+const siteUrl = "https://yamagata-ima.vercel.app";
+const ogImage = `${siteUrl}/ogp.png?v=1`;
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://yamagata-ima.vercel.app"),
+  metadataBase: new URL(siteUrl),
 
   title: "やまがたいま｜山形の「いま」が見えるライブマップ",
 
@@ -13,15 +16,16 @@ export const metadata: Metadata = {
     title: "やまがたいま｜山形の「いま」が見えるライブマップ",
     description:
       "山形県内のライブカメラを地図から簡単にチェック。観光、空港、温泉、スキー場など山形の「いま」を見てみよう。",
-    url: "https://yamagata-ima.vercel.app",
+    url: siteUrl,
     siteName: "やまがたいま",
 
     images: [
       {
-        url: "/opengraph-image.png",
+        url: ogImage,
         width: 1200,
         height: 630,
         alt: "やまがたいま｜山形ライブカメラマップ",
+        type: "image/png",
       },
     ],
 
@@ -37,7 +41,7 @@ export const metadata: Metadata = {
     description:
       "山形県内のライブカメラを地図からチェックできるWebサービス。",
 
-    images: ["/opengraph-image.png"],
+    images: [ogImage],
   },
 };
 
