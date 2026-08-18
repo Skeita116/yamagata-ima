@@ -30,15 +30,12 @@ const areas = [
 export default function Footer() {
   return (
     <footer className="relative overflow-hidden bg-slate-950 text-white">
-
       {/* 背景装飾 */}
       <div className="pointer-events-none absolute left-1/2 top-0 h-72 w-72 -translate-x-1/2 rounded-full bg-sky-500/10 blur-3xl" />
 
       <div className="relative mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-16">
-
         {/* 上段 */}
         <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr]">
-
           {/* ブランド */}
           <div>
             <Link
@@ -68,7 +65,6 @@ export default function Footer() {
 
             {/* CTA */}
             <div className="mt-6 flex flex-wrap gap-3">
-
               <Link
                 href="/#live-map"
                 className="inline-flex items-center rounded-xl bg-sky-500 px-4 py-3 text-sm font-black text-white transition hover:bg-sky-400"
@@ -82,10 +78,8 @@ export default function Footer() {
               >
                 🏆 人気を見る
               </Link>
-
             </div>
           </div>
-
 
           {/* カテゴリ */}
           <div>
@@ -98,7 +92,6 @@ export default function Footer() {
             </h2>
 
             <div className="mt-5 grid gap-2">
-
               {categories.map((category) => (
                 <Link
                   key={category.name}
@@ -120,10 +113,8 @@ export default function Footer() {
                   </span>
                 </Link>
               ))}
-
             </div>
           </div>
-
 
           {/* エリア */}
           <div>
@@ -136,7 +127,6 @@ export default function Footer() {
             </h2>
 
             <div className="mt-5 grid gap-2">
-
               {areas.map((area) => (
                 <Link
                   key={area}
@@ -154,57 +144,125 @@ export default function Footer() {
                   </span>
                 </Link>
               ))}
-
             </div>
           </div>
-
         </div>
-
 
         {/* 区切り */}
         <div className="my-10 h-px bg-gradient-to-r from-transparent via-slate-800 to-transparent" />
 
-
-        {/* 下段 */}
-        <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-
-          <div>
-            <p className="text-xs font-bold text-slate-500">
-              © 2026 やまがたいま
+        {/* サイト情報リンク */}
+        <div className="mb-8 grid gap-3 sm:grid-cols-3">
+          <Link
+            href="/about"
+            className="group rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:bg-white/10"
+          >
+            <p className="text-sm font-black text-white">
+              このサイトについて
             </p>
 
-            <p className="mt-1 text-[11px] text-slate-600">
-              山形県の「いま」を、もっと身近に。
+            <p className="mt-1 text-xs leading-5 text-slate-500">
+              やまがたいまの目的やサービスについて
             </p>
-          </div>
 
-          <div className="flex flex-wrap gap-4">
+            <p className="mt-3 text-xs font-black text-sky-300">
+              詳しく見る →
+            </p>
+          </Link>
 
-            <Link
-              href="/"
-              className="text-xs font-bold text-slate-500 transition hover:text-white"
-            >
-              TOP
-            </Link>
+          <Link
+            href="/info"
+            className="group rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:bg-white/10"
+          >
+            <p className="text-sm font-black text-white">
+              掲載情報について
+            </p>
 
-            <Link
-              href="/#search"
-              className="text-xs font-bold text-slate-500 transition hover:text-white"
-            >
-              カメラを探す
-            </Link>
+            <p className="mt-1 text-xs leading-5 text-slate-500">
+              ライブカメラ情報や掲載方針について
+            </p>
 
-            <Link
-              href="/#live-map"
-              className="text-xs font-bold text-slate-500 transition hover:text-white"
-            >
-              ライブマップ
-            </Link>
+            <p className="mt-3 text-xs font-black text-sky-300">
+              詳しく見る →
+            </p>
+          </Link>
 
-          </div>
+          <Link
+            href="/contact"
+            className="group rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:bg-white/10"
+          >
+            <p className="text-sm font-black text-white">
+              お問い合わせ
+            </p>
 
+            <p className="mt-1 text-xs leading-5 text-slate-500">
+              掲載依頼・修正・削除などはこちら
+            </p>
+
+            <p className="mt-3 text-xs font-black text-sky-300">
+              お問い合わせ →
+            </p>
+          </Link>
         </div>
 
+        {/* 下段 */}
+        <div className="border-t border-slate-800 pt-6">
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-xs font-bold text-slate-500">
+                © 2026 やまがたいま
+              </p>
+
+              <p className="mt-1 text-[11px] text-slate-600">
+                山形県の「いま」を、もっと身近に。
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-x-5 gap-y-3">
+              <Link
+                href="/"
+                className="text-xs font-bold text-slate-500 transition hover:text-white"
+              >
+                TOP
+              </Link>
+
+              <Link
+                href="/#search"
+                className="text-xs font-bold text-slate-500 transition hover:text-white"
+              >
+                カメラを探す
+              </Link>
+
+              <Link
+                href="/#live-map"
+                className="text-xs font-bold text-slate-500 transition hover:text-white"
+              >
+                ライブマップ
+              </Link>
+
+              <Link
+                href="/about"
+                className="text-xs font-bold text-slate-500 transition hover:text-white"
+              >
+                このサイトについて
+              </Link>
+
+              <Link
+                href="/info"
+                className="text-xs font-bold text-slate-500 transition hover:text-white"
+              >
+                掲載情報について
+              </Link>
+
+              <Link
+                href="/contact"
+                className="text-xs font-bold text-slate-500 transition hover:text-white"
+              >
+                お問い合わせ
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
     </footer>
   );
