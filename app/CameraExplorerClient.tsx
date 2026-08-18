@@ -80,7 +80,7 @@ export default function CameraExplorer({
   const recordCameraClick = async (
     camera: Camera
   ) => {
-    // GA4へ送信
+    // GA4
     sendGAEvent(
       "event",
       "camera_click",
@@ -92,7 +92,7 @@ export default function CameraExplorer({
       }
     );
 
-    // Supabaseへ保存
+    // Supabase
     const { error } = await supabase
       .from("camera_clicks")
       .insert({
@@ -157,7 +157,7 @@ export default function CameraExplorer({
         </div>
       </section>
 
-      {/* カテゴリ絞り込み */}
+      {/* カテゴリ */}
       <section className="mb-8">
         <p className="mb-3 text-xs font-bold uppercase tracking-widest text-sky-600">
           CATEGORY
@@ -308,41 +308,23 @@ export default function CameraExplorer({
                     )}
                   </div>
 
-                  {/* カード本文 */}
+                  {/* 本文 */}
                   <div className="p-5">
                     <div className="mb-3 flex items-center justify-between gap-3">
-                      {/* カテゴリ */}
                       <Link
                         href={`/category/${encodeURIComponent(
                           camera.category
                         )}`}
-                        className="
-                          rounded-full
-                          bg-sky-50
-                          px-3
-                          py-1
-                          text-xs
-                          font-bold
-                          text-sky-700
-                          transition
-                          hover:bg-sky-100
-                        "
+                        className="rounded-full bg-sky-50 px-3 py-1 text-xs font-bold text-sky-700 transition hover:bg-sky-100"
                       >
                         {camera.category}
                       </Link>
 
-                      {/* 市町村 */}
                       <Link
                         href={`/area/${encodeURIComponent(
                           camera.city
                         )}`}
-                        className="
-                          text-xs
-                          font-medium
-                          text-slate-400
-                          transition
-                          hover:text-sky-600
-                        "
+                        className="text-xs font-medium text-slate-400 transition hover:text-sky-600"
                       >
                         📍 {camera.city}
                       </Link>
@@ -358,7 +340,6 @@ export default function CameraExplorer({
                       </p>
                     )}
 
-                    {/* 詳細 */}
                     <Link
                       href={`/camera/${camera.id}`}
                       className="
@@ -381,13 +362,9 @@ export default function CameraExplorer({
                         hover:text-sky-600
                       "
                     >
-                      詳細を見る
-                      <span className="ml-2">
-                        →
-                      </span>
+                      詳細を見る →
                     </Link>
 
-                    {/* 市町村一覧 */}
                     <Link
                       href={`/area/${encodeURIComponent(
                         camera.city
@@ -409,13 +386,9 @@ export default function CameraExplorer({
                         hover:bg-sky-100
                       "
                     >
-                      {camera.city}のカメラ一覧を見る
-                      <span className="ml-2">
-                        →
-                      </span>
+                      {camera.city}のカメラ一覧を見る →
                     </Link>
 
-                    {/* カテゴリ一覧 */}
                     <Link
                       href={`/category/${encodeURIComponent(
                         camera.category
@@ -437,22 +410,16 @@ export default function CameraExplorer({
                         hover:bg-emerald-100
                       "
                     >
-                      {camera.category}のカメラ一覧を見る
-                      <span className="ml-2">
-                        →
-                      </span>
+                      {camera.category}のカメラ一覧を見る →
                     </Link>
 
-                    {/* ライブ映像 */}
                     {camera.stream_url ? (
                       <a
                         href={camera.stream_url}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={() => {
-                          void recordCameraClick(
-                            camera
-                          );
+                          void recordCameraClick(camera);
                         }}
                         className="
                           mt-2
