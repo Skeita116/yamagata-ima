@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { sendGAEvent } from "@next/third-parties/google";
 import Map from "./Map";
 
 type Camera = {
@@ -225,10 +226,8 @@ export default function CameraExplorer({
                     hover:shadow-lg
                   "
                 >
-
                   {/* YouTubeサムネイル */}
                   <div className="relative aspect-video bg-slate-200">
-
                     {thumbnailUrl ? (
                       <img
                         src={thumbnailUrl}
@@ -254,15 +253,11 @@ export default function CameraExplorer({
                         LIVE
                       </span>
                     )}
-
                   </div>
-
 
                   {/* カード本文 */}
                   <div className="p-5">
-
                     <div className="mb-3 flex items-center justify-between gap-3">
-
                       <span className="rounded-full bg-sky-50 px-3 py-1 text-xs font-bold text-sky-700">
                         {camera.category}
                       </span>
@@ -270,7 +265,6 @@ export default function CameraExplorer({
                       <span className="text-xs font-medium text-slate-400">
                         📍 {camera.city}
                       </span>
-
                     </div>
 
                     <h3 className="text-lg font-black leading-7 text-slate-900">
@@ -288,6 +282,18 @@ export default function CameraExplorer({
                         href={camera.stream_url}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => {
+                          sendGAEvent(
+                            "event",
+                            "camera_click",
+                            {
+                              camera_name: camera.name,
+                              city: camera.city,
+                              category: camera.category,
+                              camera_id: camera.id,
+                            }
+                          );
+                        }}
                         className="
                           mt-5
                           inline-flex
@@ -315,9 +321,7 @@ export default function CameraExplorer({
                         配信URL準備中
                       </div>
                     )}
-
                   </div>
-
                 </article>
               );
             })}
