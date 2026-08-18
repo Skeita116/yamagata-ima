@@ -11,7 +11,7 @@ const siteUrl = "https://yamagata-ima.vercel.app";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const { data: cameras } = await supabase
     .from("cameras")
-    .select("id, created_at")
+    .select("id, city, created_at")
     .order("id", { ascending: true });
 
   const cameraPages: MetadataRoute.Sitemap =
@@ -24,6 +24,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     })) ?? [];
 
+  const cities = Array.from(
+    new Set(
+      cameras
+        ?.map((camera) => camera.city)
+        .filter(Boolean) ?? []
+    )
+  );
+
+  const areaPages: MetadataRoute.Sitemap =
+    cities.map((city) => ({
+      url: `${siteUrl}/area/${encodeURIComponent(city)}`,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.7,
+    }));
+
   return [
     {
       url: siteUrl,
@@ -31,6 +47,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "daily",
       priority: 1,
     },
+
     ...cameraPages,
+
+    ...areaPages,
   ];
 }

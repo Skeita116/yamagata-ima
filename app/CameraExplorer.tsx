@@ -248,7 +248,6 @@ export default function CameraExplorer({
                       </div>
                     )}
 
-                    {/* LIVE風ラベル */}
                     {camera.stream_url && (
                       <span className="absolute left-3 top-3 rounded-md bg-red-600 px-2 py-1 text-xs font-black text-white shadow">
                         LIVE
@@ -263,9 +262,18 @@ export default function CameraExplorer({
                         {camera.category}
                       </span>
 
-                      <span className="text-xs font-medium text-slate-400">
+                      <Link
+                        href={`/area/${encodeURIComponent(camera.city)}`}
+                        className="
+                          text-xs
+                          font-medium
+                          text-slate-400
+                          transition
+                          hover:text-sky-600
+                        "
+                      >
                         📍 {camera.city}
-                      </span>
+                      </Link>
                     </div>
 
                     <h3 className="text-lg font-black leading-7 text-slate-900">
@@ -302,9 +310,31 @@ export default function CameraExplorer({
                       "
                     >
                       詳細を見る
-                      <span className="ml-2">
-                        →
-                      </span>
+                      <span className="ml-2">→</span>
+                    </Link>
+
+                    {/* 市町村ページ */}
+                    <Link
+                      href={`/area/${encodeURIComponent(camera.city)}`}
+                      className="
+                        mt-2
+                        inline-flex
+                        w-full
+                        items-center
+                        justify-center
+                        rounded-xl
+                        bg-sky-50
+                        px-4
+                        py-3
+                        text-sm
+                        font-bold
+                        text-sky-700
+                        transition
+                        hover:bg-sky-100
+                      "
+                    >
+                      {camera.city}のカメラ一覧を見る
+                      <span className="ml-2">→</span>
                     </Link>
 
                     {/* ライブ映像 */}
