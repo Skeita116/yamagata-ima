@@ -46,21 +46,13 @@ export async function generateMetadata({
   const { city } = await params;
   const decodedCity = decodeURIComponent(city);
 
-  const cameras = await getCamerasByCity(city);
-
-  if (cameras.length === 0) {
-    return {
-      title: `${decodedCity}のライブカメラ｜やまがたいま`,
-    };
-  }
-
   const pageUrl = `${siteUrl}/area/${encodeURIComponent(decodedCity)}`;
 
   const title =
     `${decodedCity}のライブカメラ一覧｜現在の様子｜やまがたいま`;
 
   const description =
-    `${decodedCity}にあるライブカメラを一覧で確認できます。観光地、空港、温泉、スキー場など、${decodedCity}の現在の様子をチェックできます。`;
+    `${decodedCity}にあるライブカメラを一覧で確認できます。観光地、温泉、空港、スキー場など、${decodedCity}の現在の様子をチェックできます。`;
 
   return {
     title,
@@ -96,6 +88,16 @@ export async function generateMetadata({
   };
 }
 
+function getCategoryIcon(category: string) {
+  if (category.includes("温泉")) return "♨️";
+  if (category.includes("スキー")) return "❄️";
+  if (category.includes("空港")) return "✈️";
+  if (category.includes("観光")) return "🏔️";
+  if (category.includes("道路")) return "🚗";
+
+  return "📷";
+}
+
 export default async function AreaPage({
   params,
 }: {
@@ -115,176 +117,259 @@ export default async function AreaPage({
   );
 
   return (
-    <main className="min-h-screen bg-slate-50">
-      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+    <main className="min-h-screen bg-slate-50 text-slate-900">
 
-        <Link
-          href="/"
-          className="text-sm font-bold text-sky-600 transition hover:text-sky-800"
-        >
-          ← 山形ライブマップへ戻る
-        </Link>
+      {/* HERO */}
+      <section className="relative overflow-hidden bg-slate-950 text-white">
 
-        <section className="mt-8">
+        <div className="absolute inset-0 bg-gradient-to-br from-sky-700/40 via-slate-950 to-slate-950" />
 
-          <p className="text-xs font-bold uppercase tracking-widest text-sky-600">
-            AREA
-          </p>
+        <div className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-sky-500/20 blur-3xl" />
 
-          <h1 className="mt-2 text-3xl font-black leading-tight text-slate-900 sm:text-5xl">
-            {decodedCity}のライブカメラ
-          </h1>
-
-          <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base">
-            {decodedCity}に設置されているライブカメラを一覧で確認できます。
-            観光やお出かけ前の天候確認、現地の様子を知りたいときにご利用ください。
-          </p>
-
-        </section>
-
-        <section className="mt-8 grid gap-3 sm:max-w-xl sm:grid-cols-2">
-
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <p className="text-xs font-bold text-slate-400">
-              掲載カメラ
-            </p>
-
-            <p className="mt-2 text-3xl font-black text-slate-900">
-              {cameras.length}
-              <span className="ml-1 text-sm font-bold text-slate-400">
-                地点
-              </span>
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <p className="text-xs font-bold text-slate-400">
-              カテゴリ
-            </p>
-
-            <p className="mt-2 text-3xl font-black text-slate-900">
-              {categories.length}
-              <span className="ml-1 text-sm font-bold text-slate-400">
-                種類
-              </span>
-            </p>
-          </div>
-
-        </section>
-
-        <section className="mt-12">
-
-          <div className="mb-6">
-            <p className="text-xs font-bold uppercase tracking-widest text-sky-600">
-              LIVE CAMERAS
-            </p>
-
-            <h2 className="mt-1 text-2xl font-black text-slate-900">
-              {decodedCity}のライブカメラ一覧
-            </h2>
-          </div>
-
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-
-            {cameras.map((camera) => {
-
-              const thumbnailUrl = camera.youtube_id
-                ? `https://img.youtube.com/vi/${camera.youtube_id}/hqdefault.jpg`
-                : null;
-
-              return (
-                <article
-                  key={camera.id}
-                  className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
-                >
-
-                  <div className="relative aspect-video bg-slate-200">
-
-                    {thumbnailUrl ? (
-                      <img
-                        src={thumbnailUrl}
-                        alt={camera.name}
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <div className="flex h-full items-center justify-center text-sm text-slate-400">
-                        サムネイル準備中
-                      </div>
-                    )}
-
-                    {camera.stream_url && (
-                      <span className="absolute left-3 top-3 rounded-md bg-red-600 px-2 py-1 text-xs font-black text-white">
-                        LIVE
-                      </span>
-                    )}
-
-                  </div>
-
-                  <div className="p-5">
-
-                    <div className="mb-3 flex items-center justify-between gap-3">
-
-                      <span className="rounded-full bg-sky-50 px-3 py-1 text-xs font-bold text-sky-700">
-                        {camera.category}
-                      </span>
-
-                      <span className="text-xs font-bold text-slate-400">
-                        📍 {camera.city}
-                      </span>
-
-                    </div>
-
-                    <h2 className="text-lg font-black leading-7 text-slate-900">
-                      {camera.name}
-                    </h2>
-
-                    {camera.description && (
-                      <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-500">
-                        {camera.description}
-                      </p>
-                    )}
-
-                    <Link
-                      href={`/camera/${camera.id}`}
-                      className="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-slate-900 px-4 py-3 text-sm font-black text-white transition hover:bg-sky-600"
-                    >
-                      詳細を見る →
-                    </Link>
-
-                  </div>
-
-                </article>
-              );
-            })}
-
-          </div>
-
-        </section>
-
-        <section className="mt-12 rounded-3xl bg-slate-900 p-6 text-white sm:p-8">
-
-          <p className="text-sm font-bold text-sky-300">
-            やまがたいま
-          </p>
-
-          <h2 className="mt-2 text-2xl font-black">
-            山形県内のライブカメラを探す
-          </h2>
-
-          <p className="mt-3 text-sm leading-7 text-slate-300">
-            山形県内の観光地・温泉・空港・スキー場などのライブカメラを地図から探せます。
-          </p>
+        <div className="relative mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20">
 
           <Link
             href="/"
-            className="mt-5 inline-flex rounded-xl bg-white px-5 py-3 text-sm font-black text-slate-900"
+            className="inline-flex items-center gap-2 text-sm font-black text-sky-300 transition hover:text-white"
           >
-            山形ライブマップを見る →
+            ← 山形ライブマップへ戻る
           </Link>
 
-        </section>
+          <div className="mt-8 max-w-3xl">
 
-      </div>
+            <div className="flex items-center gap-2">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-sky-500/20 text-xl">
+                📍
+              </span>
+
+              <p className="text-xs font-black tracking-[0.2em] text-sky-300">
+                AREA
+              </p>
+            </div>
+
+            <h1 className="mt-4 text-4xl font-black tracking-tight sm:text-6xl">
+              {decodedCity}の
+              <br className="sm:hidden" />
+              ライブカメラ
+            </h1>
+
+            <p className="mt-5 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
+              {decodedCity}に設置されているライブカメラをまとめてチェック。
+              天気・観光・お出かけ前の現地確認にご利用ください。
+            </p>
+
+            <div className="mt-8 flex gap-8">
+
+              <div>
+                <p className="text-3xl font-black">
+                  {cameras.length}
+                </p>
+
+                <p className="mt-1 text-[10px] font-black tracking-widest text-slate-400">
+                  LIVE CAMERAS
+                </p>
+              </div>
+
+              <div className="h-12 w-px bg-white/15" />
+
+              <div>
+                <p className="text-3xl font-black">
+                  {categories.length}
+                </p>
+
+                <p className="mt-1 text-[10px] font-black tracking-widest text-slate-400">
+                  CATEGORIES
+                </p>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+
+      {/* CONTENT */}
+      <section className="relative">
+
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-sky-50 to-transparent" />
+
+        <div className="relative mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20">
+
+          {/* CATEGORY LINKS */}
+          <section>
+
+            <p className="text-xs font-black tracking-[0.2em] text-sky-600">
+              CATEGORY
+            </p>
+
+            <h2 className="mt-2 text-2xl font-black sm:text-3xl">
+              {decodedCity}を目的から探す
+            </h2>
+
+            <div className="mt-5 flex flex-wrap gap-2">
+
+              {categories.map((category) => (
+                <Link
+                  key={category}
+                  href={`/category/${encodeURIComponent(category)}`}
+                  className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-black text-slate-600 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 hover:text-sky-700"
+                >
+                  <span>
+                    {getCategoryIcon(category)}
+                  </span>
+
+                  {category}
+                </Link>
+              ))}
+
+            </div>
+
+          </section>
+
+
+          {/* CAMERA LIST */}
+          <section className="mt-14">
+
+            <div className="mb-7">
+
+              <div className="flex items-center gap-2">
+                <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-red-100">
+                  📹
+                </span>
+
+                <p className="text-xs font-black tracking-[0.2em] text-red-500">
+                  LIVE CAMERAS
+                </p>
+              </div>
+
+              <h2 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">
+                {decodedCity}のライブカメラ一覧
+              </h2>
+
+              <p className="mt-2 text-sm text-slate-500">
+                {cameras.length}地点のライブカメラを掲載しています。
+              </p>
+
+            </div>
+
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+              {cameras.map((camera) => {
+                const thumbnailUrl =
+                  camera.youtube_id
+                    ? `https://img.youtube.com/vi/${camera.youtube_id}/hqdefault.jpg`
+                    : null;
+
+                return (
+                  <article
+                    key={camera.id}
+                    className="group overflow-hidden rounded-[26px] border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-sky-200 hover:shadow-xl"
+                  >
+                    <Link
+                      href={`/camera/${camera.id}`}
+                      className="relative block aspect-video overflow-hidden bg-slate-200"
+                    >
+
+                      {thumbnailUrl ? (
+                        <img
+                          src={thumbnailUrl}
+                          alt={camera.name}
+                          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="flex h-full items-center justify-center bg-gradient-to-br from-sky-100 to-slate-200 text-4xl">
+                          📷
+                        </div>
+                      )}
+
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/45 via-transparent to-transparent" />
+
+                      {camera.stream_url && (
+                        <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-red-500 px-3 py-1.5 text-[10px] font-black text-white shadow-lg">
+                          <span className="h-1.5 w-1.5 rounded-full bg-white" />
+                          LIVE
+                        </span>
+                      )}
+
+                    </Link>
+
+                    <div className="p-5">
+
+                      <div className="flex flex-wrap items-center gap-2">
+
+                        <Link
+                          href={`/category/${encodeURIComponent(camera.category)}`}
+                          className="inline-flex items-center gap-1.5 rounded-full bg-sky-50 px-3 py-1.5 text-[11px] font-black text-sky-700"
+                        >
+                          {getCategoryIcon(camera.category)}
+                          {camera.category}
+                        </Link>
+
+                        <span className="rounded-full bg-slate-100 px-3 py-1.5 text-[11px] font-black text-slate-500">
+                          📍 {camera.city}
+                        </span>
+
+                      </div>
+
+                      <Link href={`/camera/${camera.id}`}>
+                        <h3 className="mt-4 text-lg font-black leading-7 transition group-hover:text-sky-600">
+                          {camera.name}
+                        </h3>
+                      </Link>
+
+                      {camera.description && (
+                        <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-500">
+                          {camera.description}
+                        </p>
+                      )}
+
+                      <Link
+                        href={`/camera/${camera.id}`}
+                        className="mt-5 inline-flex w-full items-center justify-center rounded-2xl bg-slate-950 px-4 py-3.5 text-sm font-black text-white transition hover:bg-sky-600"
+                      >
+                        カメラを見る →
+                      </Link>
+
+                    </div>
+                  </article>
+                );
+              })}
+
+            </div>
+
+          </section>
+
+
+          {/* BACK TO MAP */}
+          <section className="mt-16 rounded-[30px] bg-slate-950 p-7 text-white sm:p-10">
+
+            <p className="text-xs font-black tracking-[0.2em] text-sky-300">
+              YAMAGATA LIVE MAP
+            </p>
+
+            <h2 className="mt-3 text-3xl font-black">
+              山形県全体から探す
+            </h2>
+
+            <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-400">
+              他の市町村や観光地も、山形ライブマップから探せます。
+            </p>
+
+            <Link
+              href="/#live-map"
+              className="mt-6 inline-flex rounded-2xl bg-sky-500 px-5 py-3.5 text-sm font-black transition hover:bg-sky-400"
+            >
+              📍 ライブマップを見る →
+            </Link>
+
+          </section>
+
+        </div>
+
+      </section>
+
     </main>
   );
 }
