@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 
 const siteUrl = "https://yamagata-ima.vercel.app";
-const ogImage = `${siteUrl}/ogp.png?v=1`;
+const ogImage = `${siteUrl}/ogp.png?v=2`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -52,7 +53,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body>{children}</body>
+      <body>
+        {children}
+
+        <GoogleAnalytics gaId="G-M4KTTEW644" />
+      </body>
     </html>
   );
 }
