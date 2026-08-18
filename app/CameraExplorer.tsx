@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { sendGAEvent } from "@next/third-parties/google";
+import Link from "next/link";
 import Map from "./Map";
 
 type Camera = {
@@ -277,6 +278,36 @@ export default function CameraExplorer({
                       </p>
                     )}
 
+                    {/* 個別ページ */}
+                    <Link
+                      href={`/camera/${camera.id}`}
+                      className="
+                        mt-5
+                        inline-flex
+                        w-full
+                        items-center
+                        justify-center
+                        rounded-xl
+                        border
+                        border-slate-200
+                        bg-white
+                        px-4
+                        py-3
+                        text-sm
+                        font-bold
+                        text-slate-700
+                        transition
+                        hover:border-sky-400
+                        hover:text-sky-600
+                      "
+                    >
+                      詳細を見る
+                      <span className="ml-2">
+                        →
+                      </span>
+                    </Link>
+
+                    {/* ライブ映像 */}
                     {camera.stream_url ? (
                       <a
                         href={camera.stream_url}
@@ -295,7 +326,7 @@ export default function CameraExplorer({
                           );
                         }}
                         className="
-                          mt-5
+                          mt-2
                           inline-flex
                           w-full
                           items-center
@@ -311,13 +342,10 @@ export default function CameraExplorer({
                           hover:bg-sky-600
                         "
                       >
-                        ライブ映像を見る
-                        <span className="ml-2">
-                          →
-                        </span>
+                        ▶ ライブ映像を見る
                       </a>
                     ) : (
-                      <div className="mt-5 rounded-xl bg-slate-100 px-4 py-3 text-center text-sm text-slate-400">
+                      <div className="mt-2 rounded-xl bg-slate-100 px-4 py-3 text-center text-sm text-slate-400">
                         配信URL準備中
                       </div>
                     )}
